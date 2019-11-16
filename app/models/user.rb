@@ -7,4 +7,6 @@ class User < ApplicationRecord
             length: { minimum: 3, maximum: 50 }
 
   validates :password, presence: true, length: { minimum: 8 }
+
+  has_many :projects
 end
