@@ -34,6 +34,9 @@ gem 'seedbank', '~> 0.5.0'
 gem 'interactor', '~> 3.1', '>= 3.1.1'
 gem 'bcrypt', '~> 3.1', '>= 3.1.13'
 gem 'jwt', '~> 2.2', '>= 2.2.1'
+gem 'simple_command', '~> 0.1.0'
+gem 'redis', '~> 4.1', '>= 4.1.3'
+gem 'redis-rails', '~> 5.0', '>= 5.0.2'
 
 group :development, :test do
   gem 'factory_bot_rails', '~> 5.0'
