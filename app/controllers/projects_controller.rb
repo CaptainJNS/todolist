@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    render json: { data: Project.where(user: current_user) }, status: :ok
+    render json: Project.where(user: current_user), status: :ok
   end
 
   def show

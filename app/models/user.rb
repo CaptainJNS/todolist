@@ -8,5 +8,5 @@ class User < ApplicationRecord
 
   validates :password, presence: true, length: { minimum: 8 }
 
-  has_many :projects
+  has_many :projects, dependent: :destroy
 end
