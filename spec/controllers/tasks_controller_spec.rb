@@ -38,25 +38,17 @@ RSpec.describe TasksController, type: :controller do
 
     context 'with valid id' do
       let(:task) { create(:task, project: project) }
-      let(:params) { { project_id: project.id, id: task.id } }
+      let(:params) { { id: task.id } }
 
       it { expect(response).to have_http_status(:ok) }
       it { expect(response).to match_response_schema('task') }
     end
 
     context 'with invalid id' do
-      let(:params) { { project_id: project.id, id: 0 } }
+      let(:params) { { id: 0 } }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
-    end
-
-    context 'with invalid project_id' do
-      let(:task) { create(:task, project: project) }
-      let(:params) { { project_id: 0, id: task.id } }
-
-      it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 
@@ -91,38 +83,31 @@ RSpec.describe TasksController, type: :controller do
     before { put :update, params: params }
 
     context 'with valid name and deadline' do
-      let(:params) { { project_id: project.id, id: task.id, name: FFaker::Lorem.word, deadline: Time.now + 1.day } }
+      let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: Time.now + 1.day } }
 
       it { expect(response).to have_http_status(:created) }
       it { expect(response).to match_response_schema('task') }
     end
 
     context 'with invalid name' do
-      let(:params) { { project_id: project.id, id: task.id, name: nil } }
+      let(:params) { { id: task.id, name: nil } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it { expect(response).to match_response_schema('errors') }
     end
 
     context 'with invalid dueDate' do
-      let(:params) { { project_id: project.id, id: task.id, deadline: Time.now - 1.day } }
+      let(:params) { { id: task.id, deadline: Time.now - 1.day } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.deadline')) }
     end
 
     context 'with invalid id' do
-      let(:params) { { project_id: project.id, id: 0, name: FFaker::Lorem.word } }
+      let(:params) { { id: 0, name: FFaker::Lorem.word } }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
-    end
-
-    context 'with invalid project_id' do
-      let(:params) { { project_id: 0, id: task.id, name: FFaker::Book.title } }
-
-      it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 
@@ -130,27 +115,18 @@ RSpec.describe TasksController, type: :controller do
     let!(:task) { create(:task, project: project) }
 
     context 'with valid id' do
-      let(:params) { { project_id: project.id, id: task.id } }
+      let(:params) { { id: task.id } }
 
       it { expect { delete :destroy, params: params }.to change(Task, :count).by(-1) }
     end
 
     context 'with invalid id' do
-      let(:params) { { project_id: project.id, id: 0 } }
+      let(:params) { { id: 0 } }
 
       before { delete :destroy, params: params }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
-    end
-
-    context 'with invalid project_id' do
-      let(:params) { { project_id: 0, id: task.id } }
-
-      before { delete :destroy, params: params }
-
-      it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 end

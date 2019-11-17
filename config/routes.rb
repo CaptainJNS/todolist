@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   post 'auth', to: 'users#create'
 
   resources :projects do
-    resources :tasks
+    resources :tasks, only: %i[index create]
   end
+
+  resources :tasks, except: %i[index create]
 end

@@ -1,9 +1,6 @@
 class TasksController < ApplicationController
   def show
-    project = Project.find_by(user: current_user, id: params[:project_id])
-    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
-
-    task = Task.find_by(project: project, id: params[:id])
+    task = Task.find_by(id: params[:id])
     return render json: task, status: :ok if task
 
     render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found
@@ -27,26 +24,15 @@ class TasksController < ApplicationController
   end
 
   def update
-    project = Project.find_by(user: current_user, id: params[:project_id])
-    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
+    result = UpdateTask.call(id: params[:id], params: task_params)
 
-    task = Task.find_by(project: project, id: params[:id])
-    return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
+    return render json: result.task, status: :created if result.success?
 
-    if params[:deadline].present? && params[:deadline] < Time.now
-      return render json: { errors: [I18n.t('errors.deadline')] }, status: :unprocessable_entity
-    end
-
-    return render json: task, status: :created if task.update(task_params)
-
-    render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
+    render json: { errors: result.errors }, status: result.status
   end
 
   def destroy
-    project = Project.find_by(user: current_user, id: params[:project_id])
-    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
-
-    task = Task.find_by(project: project, id: params[:id])
+    task = Task.find_by(id: params[:id])
 
     return task.destroy if task
 
