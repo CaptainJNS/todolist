@@ -26,13 +26,14 @@ RSpec.describe AuthenticationController, type: :controller do
 
     before do
       @request.headers[I18n.t('auth')] = token
+      stub_const('Constants::TOKEN_EXP_DATE', 5.minutes)
       delete :sign_out
     end
 
     context 'with valid token' do
       let(:token) { JsonWebToken.encode(user_id: user.id) }
 
-      it {  }
+      it { expect(Rails.cache.redis.keys).to include(token) }
     end
 
     context 'with invalid token' do
