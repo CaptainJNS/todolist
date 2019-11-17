@@ -25,5 +25,9 @@ RSpec.describe User, type: :model do
     it 'is invalid with different password confirmation' do
       expect(build(:user, password: 'password', password_confirmation: 'wordpass')).not_to be_valid
     end
+
+    context 'with associations' do
+      it { is_expected.to have_many(:projects) }
+    end
   end
 end
