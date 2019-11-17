@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
   attr_reader :current_user
 
   def authorize_request
-    header = request.headers['Authorization']
+    header = request.headers[I18n.t('auth')]
     header = header.split(' ').last if header
     begin
       @decoded = JsonWebToken.decode(header)

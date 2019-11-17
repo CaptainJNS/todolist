@@ -2,32 +2,21 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   context 'validation' do
-    it 'is invalid without username' do
-      expect(build(:user, username: nil)).not_to be_valid
-    end
+    it { is_expected.to validate_presence_of(:username) }
 
-    it 'is invalid with short username' do
-      expect(build(:user, username: 'UN')).not_to be_valid
-    end
+    it { is_expected.to validate_uniqueness_of(:username) }
 
-    it 'is invalid with long username' do
-      expect(build(:user, username: 'N' * 51)).not_to be_valid
-    end
+    it { is_expected.to validate_length_of(:username).is_at_least(3) }
 
-    it 'is invalid without password' do
-      expect(build(:user, password: nil, password_confirmation: nil)).not_to be_valid
-    end
+    it { is_expected.to validate_length_of(:username).is_at_most(50) }
 
-    it 'is invalid with short password' do
-      expect(build(:user, password: 'pass', password_confirmation: 'pass')).not_to be_valid
-    end
+    it { is_expected.to validate_presence_of(:password) }
 
-    it 'is invalid with different password confirmation' do
-      expect(build(:user, password: 'password', password_confirmation: 'wordpass')).not_to be_valid
-    end
+    it { is_expected.to validate_length_of(:password).is_at_least(8) }
+  end
 
-    context 'with associations' do
-      it { is_expected.to have_many(:projects) }
-    end
+
+  context 'with associations' do
+    it { is_expected.to have_many(:projects) }
   end
 end
