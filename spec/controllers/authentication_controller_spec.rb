@@ -25,7 +25,7 @@ RSpec.describe AuthenticationController, type: :controller do
     let(:token) {}
 
     before do
-      @request.headers['Authorization'] = token
+      @request.headers[I18n.t('auth')] = token
       delete :sign_out
     end
 
