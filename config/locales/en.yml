@@ -5,3 +5,5 @@ en:
     invalid_login: 'Invalid login credentials'
     project_not_found: 'Project not found'
     project_exist: 'The project with such name does already exist.'
+    task_not_found: 'Task not found'
+    deadline: 'Deadline can not be past'

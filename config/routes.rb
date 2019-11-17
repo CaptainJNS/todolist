@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   delete 'auth/sign_out', to: 'authentication#sign_out'
   post 'auth', to: 'users#create'
 
-  resources :projects
+  resources :projects do
+    resources :tasks
+  end
 end
