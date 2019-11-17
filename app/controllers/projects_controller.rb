@@ -7,11 +7,11 @@ class ProjectsController < ApplicationController
     project = Project.find_by(user: current_user, id: params[:id])
     return render json: project, status: :ok if project
 
-    render json: { errors: ['Project not found'] }, status: :not_found
+    render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
   end
 
   def create
-    return render json: { errors: ['The project with such name does already exist.'] }, status: :unprocessable_entity if project_exist?
+    return render json: { errors: [I18n.t('errors.project_exist')] }, status: :unprocessable_entity if project_exist?
 
     project = Project.new(user: current_user, name: params[:name])
     if project.save
@@ -23,10 +23,10 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    return render json: { errors: ['The project with such name does already exist.'] }, status: :unprocessable_entity if project_exist?
+    return render json: { errors: [I18n.t('errors.project_exist')] }, status: :unprocessable_entity if project_exist?
 
     project = Project.find_by(user: current_user, id: params[:id])
-    return render json: { errors: ['Project not found'] }, status: :not_found unless project
+    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
 
     if project.update(name: params[:name])
       render json: project, status: :created
@@ -40,7 +40,7 @@ class ProjectsController < ApplicationController
     project = Project.find_by(user: current_user, id: params[:id])
     return project.destroy if project
 
-    render json: { errors: ['Project not found'] }, status: :not_found
+    render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
   end
 
   private

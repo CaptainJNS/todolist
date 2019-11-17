@@ -4,7 +4,7 @@ RSpec.describe ProjectsController, type: :controller do
   let(:user) { create(:user) }
   let(:params) {}
 
-  before { @request.headers['Authorization'] = JsonWebToken.encode(user_id: user.id) }
+  before { @request.headers[I18n.t('auth')] = JsonWebToken.encode(user_id: user.id) }
 
   describe 'GET index' do
     before do
@@ -31,7 +31,7 @@ RSpec.describe ProjectsController, type: :controller do
       let(:params) { { id: 0 } }
 
       it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include('Project not found') }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe ProjectsController, type: :controller do
       let(:params) { { name: project.name } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(JSON.parse(response.body)['errors']).to include('The project with such name does already exist.') }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_exist')) }
     end
   end
 
@@ -84,14 +84,14 @@ RSpec.describe ProjectsController, type: :controller do
       let(:params) { { id: project.id, name: project.name } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(JSON.parse(response.body)['errors']).to include('The project with such name does already exist.') }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_exist')) }
     end
 
     context 'with invalid id' do
       let(:params) { { id: 0, name: FFaker::Lorem.word } }
 
       it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include('Project not found') }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 
@@ -110,7 +110,7 @@ RSpec.describe ProjectsController, type: :controller do
       before { delete :destroy, params: params }
 
       it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include('Project not found') }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
     end
   end
 end

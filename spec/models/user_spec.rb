@@ -15,7 +15,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_length_of(:password).is_at_least(8) }
   end
 
-
   context 'with associations' do
     it { is_expected.to have_many(:projects) }
   end
