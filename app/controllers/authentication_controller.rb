@@ -14,12 +14,12 @@ class AuthenticationController < ApplicationController
   end
 
   def sign_out
-    # todo
+    add_token_to_blacklist(request.headers['Authorization'])
   end
 
   private
 
-  def login_params
-    params.permit(:username, :password)
+  def add_token_to_blacklist(token)
+    # TODO
   end
 end
