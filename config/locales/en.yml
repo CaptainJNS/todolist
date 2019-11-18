@@ -7,3 +7,4 @@ en:
     project_exist: 'The project with such name does already exist.'
     task_not_found: 'Task not found'
     deadline: 'Deadline can not be past'
+    invalid_position: 'Invalid task position'

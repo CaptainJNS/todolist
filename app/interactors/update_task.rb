@@ -3,14 +3,12 @@ class UpdateTask
 
   def call
     context.status = :unprocessable_entity
-
     if deadline_invalid?
       context.errors = [I18n.t('errors.deadline')]
       return context.fail!
     end
 
     context.task = Task.find_by(id: context.id)
-
     unless context.task
       context.status = :not_found
       context.errors = [I18n.t('errors.task_not_found')]
@@ -29,11 +27,11 @@ class UpdateTask
     return false if context.params[:deadline].nil?
 
     begin
-     deadline = Date.parse(context.params[:deadline])
+      deadline = Date.parse(context.params[:deadline])
     rescue ArgumentError
       return true
     end
-    
+
     deadline < Time.now
   end
 end

@@ -109,6 +109,22 @@ RSpec.describe TasksController, type: :controller do
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
     end
+
+    context 'with valid position' do
+      let(:params) { { id: task.id, position: 1 } }
+
+      before { create(:task, project: project, position: 1) }
+
+      it { expect(response).to have_http_status(:created) }
+      it { expect(response).to match_response_schema('task') }
+    end
+
+    context 'with valid position' do
+      let(:params) { { id: task.id, position: 0 } }
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
+    end
   end
 
   describe 'DELETE destroy' do

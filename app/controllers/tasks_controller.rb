@@ -14,17 +14,14 @@ class TasksController < ApplicationController
   end
 
   def create
-    project = Project.find_by(user: current_user, id: params[:project_id])
-    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
+    result = CreateTask.call(project_id: params[:project_id], name: params[:name], user: current_user)
+    return render json: result.task, status: :created if result.success?
 
-    task = Task.new(project: project, name: params[:name])
-    return render json: task, status: :created if task.save
-
-    render json: { errors: task.errors.full_messages }, status: :unprocessable_entity
+    render json: { errors: result.errors }, status: result.status
   end
 
   def update
-    result = UpdateTask.call(id: params[:id], params: task_params)
+    result = params[:position].present? ? ChangePosition.call(id: params[:id], position: params[:position]) : UpdateTask.call(id: params[:id], params: task_params)
 
     return render json: result.task, status: :created if result.success?
 
@@ -33,7 +30,6 @@ class TasksController < ApplicationController
 
   def destroy
     task = Task.find_by(id: params[:id])
-
     return task.destroy if task
 
     render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found
