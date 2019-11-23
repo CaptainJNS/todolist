@@ -3,4 +3,6 @@ class Task < ApplicationRecord
   has_one :user, through: :project
 
   validates :name, presence: true
+
+  has_many :comments, dependent: :destroy
 end

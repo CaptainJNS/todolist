@@ -8,6 +8,7 @@ en:
     task_not_found: 'Task not found'
     deadline: 'Deadline can not be past'
     invalid_position: 'Invalid task position'
+    comment_not_found: 'Comment not found'
 
   messages:
     all_tasks_complete: 'Well Done! You are successfully completed all the tasks.'
