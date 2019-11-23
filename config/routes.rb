@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   end
 
   resources :tasks, except: %i[index create]
+
+  put 'tasks/:id/complete', to: 'tasks#complete'
 end

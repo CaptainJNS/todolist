@@ -35,9 +35,23 @@ class TasksController < ApplicationController
     render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found
   end
 
+  def complete
+    task = Task.find_by(id: params[:id])
+    return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
+
+    task.update(done: !task.done)
+    render json: { messages: [I18n.t('messages.all_tasks_complete')] } if all_tasks_complete(task.project.tasks)
+  end
+
   private
 
   def task_params
     params.permit(:name, :deadline)
+  end
+
+  def all_tasks_complete(tasks)
+    tasks.each { |t| return false unless t.done }
+
+    true
   end
 end

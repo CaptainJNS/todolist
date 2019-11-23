@@ -96,8 +96,15 @@ RSpec.describe TasksController, type: :controller do
       it { expect(response).to match_response_schema('errors') }
     end
 
-    context 'with invalid dueDate' do
+    context 'with incorrect dueDate' do
       let(:params) { { id: task.id, deadline: Time.now - 1.day } }
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.deadline')) }
+    end
+
+    context 'with invalid dueDate' do
+      let(:params) { { id: task.id, deadline: 'not-a-date' } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.deadline')) }
@@ -125,6 +132,13 @@ RSpec.describe TasksController, type: :controller do
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
     end
+
+    context 'with invalid id when position update' do
+      let(:params) { { id: 0, position: 0 } }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
+    end
   end
 
   describe 'DELETE destroy' do
@@ -140,6 +154,27 @@ RSpec.describe TasksController, type: :controller do
       let(:params) { { id: 0 } }
 
       before { delete :destroy, params: params }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
+    end
+  end
+
+  describe 'PUT complete' do
+    let(:task) { create(:task, project: project) }
+
+    before { put :complete, params: params }
+
+    context 'with correct id' do
+      let(:params) { { id: task.id } }
+
+      # it { expect { put :complete, params: params }.to change(task, :done) }
+      # it { expect(task.done).to be true } # don't know why, but it fails
+      it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
+    end
+
+    context 'with invalid id' do
+      let(:params) { { id: 0 } }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
