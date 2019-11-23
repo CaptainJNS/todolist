@@ -56,6 +56,15 @@ RSpec.describe CommentsController, type: :controller do
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
     end
+
+    context 'with valid image' do
+      let(:image) { fixture_file_upload('image.png') }
+      let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph, image: image } }
+
+      it { expect(response).to have_http_status(:created) }
+      it { expect(response).to match_response_schema('comment') }
+      it { expect(task.comments.last.image.attached?).to be true }
+    end
   end
 
   describe 'DELETE destroy' do
