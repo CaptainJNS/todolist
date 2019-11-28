@@ -34,7 +34,11 @@ RSpec.describe CommentsController, type: :controller do
   end
 
   describe 'POST create' do
-    before { post :create, params: params }
+    before do |example|
+      unless example.metadata[:skip_before]
+        post :create, params: params
+      end
+    end
 
     context 'with valid body' do
       let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph } }
@@ -64,6 +68,32 @@ RSpec.describe CommentsController, type: :controller do
       it { expect(response).to have_http_status(:created) }
       it { expect(response).to match_response_schema('comment') }
       it { expect(task.comments.last.image.attached?).to be true }
+    end
+
+    context 'with invalid image size', skip_before: true do
+      let(:image) { fixture_file_upload('image.png') }
+      let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph, image: image } }
+
+      before do
+        stub_const('Constants::IMAGE_MAX_SIZE', 0)
+        post :create, params: params
+      end
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(response).to match_response_schema('errors') }
+    end
+
+    context 'with invalid image type', skip_before: true do
+      let(:image) { fixture_file_upload('image.png') }
+      let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph, image: image } }
+
+      before do
+        stub_const('Constants::PERMITTED_IMAGE_TYPES', [])
+        post :create, params: params
+      end
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(response).to match_response_schema('errors') }
     end
   end
 
