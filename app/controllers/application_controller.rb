@@ -8,8 +8,8 @@ class ApplicationController < ActionController::API
     begin
       raise JWT::DecodeError, I18n.t('errors.invalid_login') if Rails.cache.redis.keys.include?(header)
 
-      @decoded = JsonWebToken.decode(header)
-      @current_user = User.find(@decoded[:user_id])
+      decoded = JsonWebToken.decode(header)
+      @current_user = User.find(decoded[:user_id])
     rescue JWT::DecodeError => e
       render json: { errors: [e.message] }, status: :unauthorized
     end

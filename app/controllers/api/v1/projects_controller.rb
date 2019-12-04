@@ -1,10 +1,9 @@
-class ProjectsController < ApplicationController
+class Api::V1::ProjectsController < ApplicationController
   def index
     render json: Project.where(user: current_user), status: :ok
   end
 
   def show
-    project = Project.find_by(user: current_user, id: params[:id])
     return render json: project, status: :ok if project
 
     render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
@@ -18,16 +17,21 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    result = UpdateProject.call(user: current_user, name: params[:name], id: params[:id])
+    result = UpdateProject.call(project: project, name: params[:name])
     return render json: result.project, status: :created if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end
 
   def destroy
-    project = Project.find_by(user: current_user, id: params[:id])
     return project.destroy if project
 
     render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
+  end
+
+  private
+
+  def project
+    Project.find_by(id: params[:id], user: current_user)
   end
 end

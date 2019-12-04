@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe AuthenticationController, type: :controller do
+RSpec.describe Api::V1::SessionsController, type: :controller do
   let(:params) { {} }
   let!(:user) { create(:user, username: 'Jason', password: 'password', password_confirmation: 'password') }
 
-  describe 'POST sign_in' do
-    before { post :sign_in, params: params }
+  describe 'POST create' do
+    before { post :create, params: params }
 
     context 'with valid login data' do
       let(:params) { { username: 'Jason', password: 'password' } }
@@ -21,13 +21,13 @@ RSpec.describe AuthenticationController, type: :controller do
     end
   end
 
-  describe 'DELETE sign_out' do
+  describe 'DELETE destroy' do
     let(:token) {}
 
     before do
       @request.headers[I18n.t('auth')] = token
       stub_const('Constants::TOKEN_EXP_DATE', 5.minutes)
-      delete :sign_out
+      delete :destroy
     end
 
     context 'with valid token' do
