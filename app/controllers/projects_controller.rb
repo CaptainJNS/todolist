@@ -5,7 +5,6 @@ class ProjectsController < ApplicationController
 
   def show
     project = Project.find_by(user: current_user, id: params[:id])
-
     return render json: project, status: :ok if project
 
     render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
@@ -13,7 +12,6 @@ class ProjectsController < ApplicationController
 
   def create
     result = CreateProject.call(user: current_user, name: params[:name])
-
     return render json: result.project, status: :created if result.success?
 
     render json: { errors: result.errors }, status: :unprocessable_entity
@@ -21,7 +19,6 @@ class ProjectsController < ApplicationController
 
   def update
     result = UpdateProject.call(user: current_user, name: params[:name], id: params[:id])
-
     return render json: result.project, status: :created if result.success?
 
     render json: { errors: result.errors }, status: result.status
@@ -29,7 +26,6 @@ class ProjectsController < ApplicationController
 
   def destroy
     project = Project.find_by(user: current_user, id: params[:id])
-
     return project.destroy if project
 
     render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found

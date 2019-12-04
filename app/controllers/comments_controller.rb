@@ -7,13 +7,10 @@ class CommentsController < ApplicationController
   end
 
   def create
-    task = Task.find_by(id: params[:task_id])
-    return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
+    result = CreateComment.call(task_id: params[:task_id], body: params[:body], image: params[:image])
+    return render json: result.comment, status: :created if result.success?
 
-    comment = Comment.new(task: task, body: params[:body], image: params[:image])
-    return render json: comment, status: :created if comment.save
-
-    render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+    render json: { errors: result.errors }, status: result.status
   end
 
   def destroy

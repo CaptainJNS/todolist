@@ -22,7 +22,6 @@ class TasksController < ApplicationController
 
   def update
     result = params[:position].present? ? ChangePosition.call(id: params[:id], position: params[:position]) : UpdateTask.call(id: params[:id], params: task_params)
-
     return render json: result.task, status: :created if result.success?
 
     render json: { errors: result.errors }, status: result.status

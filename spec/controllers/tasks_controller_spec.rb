@@ -83,7 +83,7 @@ RSpec.describe TasksController, type: :controller do
     before { put :update, params: params }
 
     context 'with valid name and deadline' do
-      let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: Time.now + 1.day } }
+      let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
 
       it { expect(response).to have_http_status(:created) }
       it { expect(response).to match_response_schema('task') }
@@ -96,18 +96,18 @@ RSpec.describe TasksController, type: :controller do
       it { expect(response).to match_response_schema('errors') }
     end
 
-    context 'with incorrect dueDate' do
-      let(:params) { { id: task.id, deadline: Time.now - 1.day } }
+    context 'with past deadline' do
+      let(:params) { { id: task.id, deadline: DateTime.now - 1.day } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.deadline')) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.past_deadline')) }
     end
 
-    context 'with invalid dueDate' do
+    context 'with invalid deadline' do
       let(:params) { { id: task.id, deadline: 'not-a-date' } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.deadline')) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_deadline')) }
     end
 
     context 'with invalid id' do
@@ -168,8 +168,6 @@ RSpec.describe TasksController, type: :controller do
     context 'with correct id' do
       let(:params) { { id: task.id } }
 
-      # it { expect { put :complete, params: params }.to change(task, :done) }
-      # it { expect(task.done).to be true } # don't know why, but it fails
       it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
     end
 
