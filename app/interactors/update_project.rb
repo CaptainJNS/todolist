@@ -5,10 +5,10 @@ class UpdateProject
   def call
     context.project = Project.find_by(user: context.user, id: context.id)
 
-    return object_not_found!(context, :project) unless context.project
+    return object_not_found!(:project) unless context.project
 
     return context if context.project.update(name: context.name)
 
-    object_invalid!(context, :project)
+    object_invalid!(:project)
   end
 end

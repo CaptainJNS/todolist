@@ -4,10 +4,10 @@ class ChangePosition
 
   def call
     context.task = Task.find_by(id: context.id)
-    return object_not_found!(context, :task) unless context.task
+    return object_not_found!(:task) unless context.task
 
     swap_positions(context.position.to_i)
-    return object_invalid!(context, :task) unless context.task.save
+    return object_invalid!(:task) unless context.task.save
   end
 
   private
