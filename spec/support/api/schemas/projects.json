@@ -1,0 +1,12 @@
+{
+  "type": "array",
+  "items":{
+    "properties": {
+      "id": { "type": "integer" },
+      "name": { "type": "string" },
+      "user_id": { "type": "integer" },
+      "created_at": { "type": "string", "format": "date-time" },
+      "updated_at": { "type": "string", "format": "date-time" }
+    }
+  }
+}
