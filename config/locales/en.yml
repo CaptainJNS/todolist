@@ -8,6 +8,9 @@ en:
     task_not_found: 'Task not found'
     deadline: 'Deadline can not be past'
     invalid_position: 'Invalid task position'
+    comment_not_found: 'Comment not found'
+    invalid_image_type: 'Wrong file format. You can upload a *.jpg or *.png formats files only'
+    invalid_image_size: 'An uploaded file is too large. The size shouldn’t exceed 10 MB.'
 
   messages:
     all_tasks_complete: 'Well Done! You are successfully completed all the tasks.'
