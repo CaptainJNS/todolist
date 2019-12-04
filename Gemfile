@@ -28,6 +28,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'draper', '~> 3.1'
 gem 'ffaker', '~> 2.11'
 gem 'seedbank', '~> 0.5.0'
