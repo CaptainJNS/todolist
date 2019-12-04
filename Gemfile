@@ -34,6 +34,11 @@ gem 'seedbank', '~> 0.5.0'
 gem 'interactor', '~> 3.1', '>= 3.1.1'
 gem 'bcrypt', '~> 3.1', '>= 3.1.13'
 gem 'jwt', '~> 2.2', '>= 2.2.1'
+gem 'simple_command', '~> 0.1.0'
+gem 'redis', '~> 4.1', '>= 4.1.3'
+gem 'redis-rails', '~> 5.0', '>= 5.0.2'
+gem 'hiredis', '~> 0.6.3'
+gem 'paperclip', '~> 6.1'
 
 group :development, :test do
   gem 'factory_bot_rails', '~> 5.0'
@@ -56,6 +61,7 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0', '>= 1.0.4'
   gem 'shoulda-matchers'
   gem 'simplecov', '~> 0.16.1'
+  gem 'json-schema', '~> 2.8', '>= 2.8.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

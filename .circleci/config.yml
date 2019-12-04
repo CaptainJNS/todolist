@@ -9,6 +9,7 @@ jobs:
           POSTGRES_DB: todolist_test
           POSTGRES_PASSWORD: password
           DATABASE_URL: "postgres://ubuntu@localhost:5432/todolist_test"
+      - image: redis
     
     steps:
       - checkout
