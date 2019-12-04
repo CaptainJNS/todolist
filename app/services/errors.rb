@@ -1,6 +1,6 @@
 module Errors
   def object_not_found!(context, object)
-    context.errors = [not_found_message(object)]
+    context.errors = [I18n.t("errors.#{object}_not_found")]
     context.status = :not_found
     context.fail!
   end
@@ -12,13 +12,6 @@ module Errors
   end
 
   private
-
-  def not_found_message(object)
-    case object
-    when :project then I18n.t('errors.project_not_found')
-    when :task then I18n.t('errors.task_not_found')
-    end
-  end
 
   def validation_errors(object)
     case object
