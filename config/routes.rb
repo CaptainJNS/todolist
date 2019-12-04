@@ -4,5 +4,11 @@ Rails.application.routes.draw do
   delete 'auth/sign_out', to: 'authentication#sign_out'
   post 'auth', to: 'users#create'
 
-  resources :projects
+  resources :projects do
+    resources :tasks, only: %i[index create]
+  end
+
+  resources :tasks, except: %i[index create]
+
+  put 'tasks/:id/complete', to: 'tasks#complete'
 end
