@@ -40,6 +40,7 @@ gem 'redis', '~> 4.1', '>= 4.1.3'
 gem 'redis-rails', '~> 5.0', '>= 5.0.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'paperclip', '~> 6.1'
+gem 'apipie-rails', '~> 0.5.16'
 
 group :development, :test do
   gem 'factory_bot_rails', '~> 5.0'
