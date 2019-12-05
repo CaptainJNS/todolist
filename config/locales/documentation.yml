@@ -1,9 +1,13 @@
 en:
   docs:
 
+    default:
+      app_info: 'The idea of the project is a simple tool for productivity improvement. It let the user an ability to easy manage and control his own projects and tasks.'
+      copyright: 'CaptainJNS Production'
+
     sessions:
-      short_description: 'Short description'
-      long_description: 'Some long description'
+      short_description: 'Creates and deletes session Tokens'
+      long_description: "For using Token you must create it and write it to the request header '%{header}'"
       params:
         username: 'User login'
         password: 'User password'
@@ -12,14 +16,14 @@ en:
         destroy: 'Deletes session token'
 
     users:
-      short_description: 'Short description'
-      long_description: 'Some long description'
+      short_description: 'Register a new Users'
+      long_description: ''
       actions:
         create: 'Creates a User'
     
     projects:
-      short_description: 'Short description'
-      long_description: 'Some long description'
+      short_description: 'Managing Projects'
+      long_description: ''
       params:
         id: 'ID of the requested Project'
         name: 'Name of the Project'
@@ -31,8 +35,8 @@ en:
         destroy: 'Deletes a Project'
 
     tasks:
-      short_description: 'Short description'
-      long_description: 'Some long description'
+      short_description: 'Managing Tasks'
+      long_description: ''
       params:
         id: 'ID of the requested Task'
         project_id: 'ID of the Project Task belongs'
@@ -48,8 +52,8 @@ en:
         complete: 'Changes a Done attribute in the Task'
 
     comments:
-      short_description: 'Short description'
-      long_description: 'Some long description'
+      short_description: 'Managing Comments'
+      long_description: ''
       params:
         id: 'ID of the requested Comment'
         project_id: 'ID of the Project that owns a task that owns the Comment'

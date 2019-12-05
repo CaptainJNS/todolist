@@ -3,7 +3,7 @@ class Api::V1::SessionsController < ApplicationController
 
   resource_description do
     short I18n.t('docs.sessions.short_description')
-    description I18n.t('docs.sessions.long_description')
+    description I18n.t('docs.sessions.long_description', header: I18n.t(:auth))
   end
 
   api :POST, '/session', I18n.t('docs.sessions.actions.create')
