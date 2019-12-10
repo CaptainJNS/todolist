@@ -2,7 +2,6 @@ class Api::V1::TasksController < ApplicationController
   resource_description do
     short I18n.t('docs.tasks.short_description')
     description I18n.t('docs.tasks.long_description')
-    param :project_id, :number, I18n.t('docs.tasks.params.project_id'), required: true
   end
 
   def_param_group :task do
@@ -10,7 +9,7 @@ class Api::V1::TasksController < ApplicationController
     param :deadline, DateTime, I18n.t('docs.tasks.params.deadline')
   end
 
-  api :GET, '/projects/:project_id/tasks/:id', I18n.t('docs.tasks.actions.show')
+  api :GET, '/tasks/:id', I18n.t('docs.tasks.actions.show')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   def show
     return render json: task, status: :ok if task
@@ -19,6 +18,7 @@ class Api::V1::TasksController < ApplicationController
   end
 
   api :GET, '/projects/:project_id/tasks', I18n.t('docs.tasks.actions.index')
+  param :project_id, :number, I18n.t('docs.tasks.params.project_id'), required: true
   def index
     return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
 
@@ -27,6 +27,7 @@ class Api::V1::TasksController < ApplicationController
 
   api :POST, '/projects/:project_id/tasks/:id', I18n.t('docs.tasks.actions.show')
   param_group :task
+  param :project_id, :number, I18n.t('docs.tasks.params.project_id'), required: true
   def create
     result = CreateTask.call(project: project, name: params[:name])
     return render json: result.task, status: :created if result.success?
@@ -34,7 +35,7 @@ class Api::V1::TasksController < ApplicationController
     render json: { errors: result.errors }, status: result.status
   end
 
-  api :PUT, '/projects/:project_id/tasks/:id', I18n.t('docs.tasks.actions.update')
+  api :PUT, '/tasks/:id', I18n.t('docs.tasks.actions.update')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   param :position, :number, I18n.t('docs.tasks.params.position')
   param_group :task
@@ -45,7 +46,7 @@ class Api::V1::TasksController < ApplicationController
     render json: { errors: result.errors }, status: result.status
   end
 
-  api :DELETE, '/projects/:project_id/tasks/:id', I18n.t('docs.tasks.actions.destroy')
+  api :DELETE, '/tasks/:id', I18n.t('docs.tasks.actions.destroy')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   def destroy
     return task.destroy if task
@@ -53,7 +54,7 @@ class Api::V1::TasksController < ApplicationController
     render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found
   end
 
-  api :POST, '/projects/:project_id/tasks/:id/complete', I18n.t('docs.tasks.actions.complete')
+  api :POST, '/tasks/:id/complete', I18n.t('docs.tasks.actions.complete')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   def complete
     return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
@@ -69,7 +70,7 @@ class Api::V1::TasksController < ApplicationController
   end
 
   def task
-    Task.find_by(id: params[:id], project: project)
+    Task.find_by(id: params[:id], project: current_user.projects)
   end
 
   def task_params

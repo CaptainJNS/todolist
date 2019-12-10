@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       resources :users, only: :create
 
       resources :projects do
-        resources :tasks do
+        resources :tasks, shallow: true do
           resources :comments, only: %i[index create destroy]
         end
       end
