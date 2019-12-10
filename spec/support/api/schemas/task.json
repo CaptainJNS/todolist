@@ -5,7 +5,10 @@
     "name": { "type": "string" },
     "project_id": { "type": "integer" },
     "done": { "type": "boolean" },
-    "deadline": { "type": "string" },
+    "deadline": {
+      "anyOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" } ] },
     "position": { "type": "integer" },
     "created_at": { "type": "string", "format": "date-time" },
     "updated_at": { "type": "string", "format": "date-time" }
