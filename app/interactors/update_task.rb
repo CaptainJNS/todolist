@@ -16,7 +16,7 @@ class UpdateTask
   def change_position(position)
     context.task.insert_at(position)
   rescue ArgumentError
-    context.task.update(position: position)
+    Task.acts_as_list_no_update { context.task.update(position: position) }
   end
 
   def all_tasks_complete(tasks)
