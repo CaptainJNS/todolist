@@ -132,6 +132,13 @@ RSpec.describe Api::V1::TasksController, type: :controller do
     end
 
     context 'with invalid position' do
+      let(:params) { { id: task.id, position: -1 } }
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
+    end
+
+    context 'with invalid position' do
       let(:params) { { id: task.id, position: project.tasks.count.next } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
