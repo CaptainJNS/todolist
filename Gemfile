@@ -41,6 +41,7 @@ gem 'redis-rails', '~> 5.0', '>= 5.0.2'
 gem 'hiredis', '~> 0.6.3'
 gem 'paperclip', '~> 6.1'
 gem 'apipie-rails', '~> 0.5.16'
+gem 'acts_as_list', '~> 1.0'
 
 group :development, :test do
   gem 'factory_bot_rails', '~> 5.0'

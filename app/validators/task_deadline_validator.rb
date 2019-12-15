@@ -1,7 +1,5 @@
 class TaskDeadlineValidator < ActiveModel::EachValidator
   def validate_each(record, _attribute, value)
-    return if record.new_record?
-
     check_deadline(record, value)
   end
 

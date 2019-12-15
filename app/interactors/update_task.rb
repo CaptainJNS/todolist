@@ -5,16 +5,17 @@ class UpdateTask
   def call
     return object_not_found!(:task) unless context.task
 
-    swap_position(context.position) if context.params[:position].present?
-    return context if context.task.update(context.params)
+    change_position(context.params[:position].to_i) if context.params[:position].present?
+    return context if context.task.update(context.params.except(:position))
 
     object_invalid!(:task)
   end
 
   private
 
-  def swap_position(position)
-    another_task = Task.find_by(project: context.task.project, position: position)
-    another_task&.update(position: context.task.position)
+  def change_position(position)
+    context.task.insert_at(position)
+  rescue ArgumentError
+    context.task.update(position: position)
   end
 end
