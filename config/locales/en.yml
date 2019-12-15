@@ -12,6 +12,7 @@ en:
     comment_not_found: 'Comment not found'
     invalid_image_type: 'Wrong file format. You can upload a *.jpg or *.png formats files only'
     invalid_image_size: 'An uploaded file is too large. The size shouldn’t exceed 10 MB.'
+    invalid_done: 'Done must be a boolean'
 
   messages:
     all_tasks_complete: 'Well Done! You are successfully completed all the tasks.'

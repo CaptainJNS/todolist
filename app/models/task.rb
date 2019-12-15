@@ -8,4 +8,5 @@ class Task < ApplicationRecord
 
   validates_with TaskDeadlineValidator, attributes: :deadline, if: :deadline_changed?
   validates_with TaskPositionValidator, attributes: :position, if: :position_changed?
+  validates_with TaskDoneValidator, attributes: :done, if: :done_changed?
 end

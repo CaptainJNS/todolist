@@ -38,10 +38,11 @@ class Api::V1::TasksController < ApplicationController
   api :PUT, '/tasks/:id', I18n.t('docs.tasks.actions.update')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   param :position, :number, I18n.t('docs.tasks.params.position')
+  param :done, :boolean, I18n.t('docs.tasks.params.done')
   param_group :task
   def update
     result = UpdateTask.call(task: task, params: task_params)
-    return render json: result.task, status: :ok if result.success?
+    return render json: result.data, status: :ok if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end
@@ -55,15 +56,6 @@ class Api::V1::TasksController < ApplicationController
     render json: {}, status: :ok
   end
 
-  api :POST, '/tasks/:id/complete', I18n.t('docs.tasks.actions.complete')
-  param :id, :number, I18n.t('docs.tasks.params.id'), required: true
-  def complete
-    return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
-
-    task.update(done: !task.done)
-    render json: { messages: [I18n.t('messages.all_tasks_complete')] } if all_tasks_complete(task.project.tasks)
-  end
-
   private
 
   def project
@@ -75,12 +67,6 @@ class Api::V1::TasksController < ApplicationController
   end
 
   def task_params
-    params.permit(:name, :deadline, :position)
-  end
-
-  def all_tasks_complete(tasks)
-    tasks.each { |t| return false unless t.done }
-
-    true
+    params.permit(:name, :deadline, :position, :done)
   end
 end

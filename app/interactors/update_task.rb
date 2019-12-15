@@ -6,9 +6,9 @@ class UpdateTask
     return object_not_found!(:task) unless context.task
 
     change_position(context.params[:position].to_i) if context.params[:position].present?
-    return context if context.task.update(context.params.except(:position))
+    return object_invalid!(:task) unless context.task.update(context.params.except(:position))
 
-    object_invalid!(:task)
+    context.data = all_tasks_complete(context.task.project.tasks) ? { messages: [I18n.t('messages.all_tasks_complete')] } : {}
   end
 
   private
@@ -17,5 +17,11 @@ class UpdateTask
     context.task.insert_at(position)
   rescue ArgumentError
     context.task.update(position: position)
+  end
+
+  def all_tasks_complete(tasks)
+    tasks.each { |t| return false unless t.done }
+
+    true
   end
 end

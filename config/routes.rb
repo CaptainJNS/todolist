@@ -12,8 +12,6 @@ Rails.application.routes.draw do
           resources :comments, only: %i[index create destroy]
         end
       end
-
-      put 'tasks/:id/complete', to: 'tasks#complete'
     end
   end
 end

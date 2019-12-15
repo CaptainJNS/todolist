@@ -43,6 +43,7 @@ en:
         name: 'Name of the Task'
         position: 'Number of the Task position'
         deadline: 'Due Date for Task'
+        done: 'Defines if task is finished'
       actions:
         index: 'A list of Tasks'
         show: 'Shows a Task'

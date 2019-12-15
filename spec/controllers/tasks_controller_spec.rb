@@ -86,7 +86,6 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
 
       it { expect(response).to have_http_status(:ok) }
-      it { expect(response).to match_response_schema('task') }
     end
 
     context 'with invalid name' do
@@ -123,21 +122,39 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       before { create(:task, project: project, position: 1) }
 
       it { expect(response).to have_http_status(:ok) }
-      it { expect(response).to match_response_schema('task') }
     end
 
-    context 'with valid position' do
+    context 'with invalid position' do
       let(:params) { { id: task.id, position: 0 } }
 
       it { expect(response).to have_http_status(:unprocessable_entity) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
     end
 
-    context 'with invalid id when position update' do
-      let(:params) { { id: 0, position: 0 } }
+    context 'with invalid position' do
+      let(:params) { { id: task.id, position: project.tasks.count.next } }
 
-      it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
+    end
+
+    context 'with invalid position' do
+      let(:params) { { id: task.id, position: 'bla-bla-bla' } }
+
+      it { expect(response).to have_http_status(:unprocessable_entity) }
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_position')) }
+    end
+
+    context 'with valid done parameter' do
+      let(:params) { { id: task.id, done: true } }
+
+      it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
+    end
+
+    context 'with invalid done parameter' do
+      let(:params) { { id: task.id, done: 'bla-bla-bla' } }
+
+      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.invalid_done')) }
     end
   end
 
@@ -154,25 +171,6 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       let(:params) { { id: 0 } }
 
       before { delete :destroy, params: params }
-
-      it { expect(response).to have_http_status(:not_found) }
-      it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
-    end
-  end
-
-  describe 'PUT complete' do
-    let(:task) { create(:task, project: project) }
-
-    before { put :complete, params: params }
-
-    context 'with correct id' do
-      let(:params) { { id: task.id } }
-
-      it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
-    end
-
-    context 'with invalid id' do
-      let(:params) { { id: 0 } }
 
       it { expect(response).to have_http_status(:not_found) }
       it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }

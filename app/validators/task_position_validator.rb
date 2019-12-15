@@ -6,7 +6,7 @@ class TaskPositionValidator < ActiveModel::EachValidator
   private
 
   def check_position(record, value)
-    record.errors.add(:base, I18n.t('errors.invalid_position')) if value.zero? || value > max_position(record)
+    record.errors.add(:base, I18n.t('errors.invalid_position')) if value <= 0 || value > max_position(record)
   end
 
   def max_position(record)
