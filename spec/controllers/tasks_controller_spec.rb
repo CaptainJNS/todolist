@@ -85,7 +85,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
     context 'with valid name and deadline' do
       let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
 
-      it { expect(response).to have_http_status(:created) }
+      it { expect(response).to have_http_status(:ok) }
       it { expect(response).to match_response_schema('task') }
     end
 
@@ -122,7 +122,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
 
       before { create(:task, project: project, position: 1) }
 
-      it { expect(response).to have_http_status(:created) }
+      it { expect(response).to have_http_status(:ok) }
       it { expect(response).to match_response_schema('task') }
     end
 

@@ -10,7 +10,7 @@ class Api::V1::ProjectsController < ApplicationController
 
   api :GET, '/projects', I18n.t('docs.projects.actions.index')
   def index
-    render json: Project.where(user: current_user), status: :ok
+    render json: current_user.projects, status: :ok
   end
 
   api :GET, '/projects/:id', I18n.t('docs.projects.actions.show')
@@ -35,7 +35,7 @@ class Api::V1::ProjectsController < ApplicationController
   param_group :project
   def update
     result = UpdateProject.call(project: project, name: params[:name])
-    return render json: result.project, status: :created if result.success?
+    return render json: result.project, status: :ok if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end
@@ -43,14 +43,15 @@ class Api::V1::ProjectsController < ApplicationController
   api :DELETE, '/projects/:id', I18n.t('docs.projects.actions.destroy')
   param :id, :number, I18n.t('docs.projects.params.id'), required: true
   def destroy
-    return project.destroy if project
+    return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
 
-    render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found
+    project.destroy
+    render json: {}, status: :ok
   end
 
   private
 
   def project
-    Project.find_by(id: params[:id], user: current_user)
+    current_user.projects.find_by(id: params[:id])
   end
 end

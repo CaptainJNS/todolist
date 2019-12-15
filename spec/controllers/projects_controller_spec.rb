@@ -69,7 +69,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'with valid name' do
       let(:params) { { id: project.id, name: FFaker::Lorem.word } }
 
-      it { expect(response).to have_http_status(:created) }
+      it { expect(response).to have_http_status(:ok) }
       it { expect(response).to match_response_schema('project') }
     end
 

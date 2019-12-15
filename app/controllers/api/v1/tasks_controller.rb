@@ -22,7 +22,7 @@ class Api::V1::TasksController < ApplicationController
   def index
     return render json: { errors: [I18n.t('errors.project_not_found')] }, status: :not_found unless project
 
-    render json: Task.where(project: project), status: :ok
+    render json: project.tasks, status: :ok
   end
 
   api :POST, '/projects/:project_id/tasks/:id', I18n.t('docs.tasks.actions.show')
@@ -41,7 +41,7 @@ class Api::V1::TasksController < ApplicationController
   param_group :task
   def update
     result = UpdateTask.call(task: task, params: task_params)
-    return render json: result.task, status: :created if result.success?
+    return render json: result.task, status: :ok if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end
@@ -49,9 +49,10 @@ class Api::V1::TasksController < ApplicationController
   api :DELETE, '/tasks/:id', I18n.t('docs.tasks.actions.destroy')
   param :id, :number, I18n.t('docs.tasks.params.id'), required: true
   def destroy
-    return task.destroy if task
+    return render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found unless task
 
-    render json: { errors: [I18n.t('errors.task_not_found')] }, status: :not_found
+    task.destroy
+    render json: {}, status: :ok
   end
 
   api :POST, '/tasks/:id/complete', I18n.t('docs.tasks.actions.complete')
@@ -66,11 +67,11 @@ class Api::V1::TasksController < ApplicationController
   private
 
   def project
-    Project.find_by(id: params[:project_id], user: current_user)
+    current_user.projects.find_by(id: params[:project_id])
   end
 
   def task
-    Task.find_by(id: params[:id], project: current_user.projects)
+    current_user.tasks.find_by(id: params[:id])
   end
 
   def task_params

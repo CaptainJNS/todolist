@@ -3,9 +3,9 @@ class CreateComment
   include Errors
 
   def call
-    return object_not_found!(:task) unless context.params[:task].present?
+    return object_not_found!(:task) unless context.task
 
-    context.comment = Comment.new(context.params)
+    context.comment = context.task.comments.build(context.params)
     return context if context.comment.save
 
     object_invalid!(:comment)

@@ -6,6 +6,6 @@ class ProjectValidator < ActiveModel::EachValidator
   private
 
   def check_uniqueness(record, attribute, value)
-    record.errors.add(:base, I18n.t('errors.project_exist')) if Project.find_by(user: record.user, attribute => value)
+    record.errors.add(:base, I18n.t('errors.project_exist')) if record.user&.projects&.find_by(attribute => value)
   end
 end
