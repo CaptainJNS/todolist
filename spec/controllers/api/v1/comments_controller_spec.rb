@@ -11,12 +11,12 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'when Success' do
       context 'with valid task_id' do
         let(:params) { { task_id: task.id } }
-  
+
         before do
           create(:comment, task: task)
           get :index, params: params
         end
-  
+
         it { expect(response).to have_http_status(:ok) }
         it { expect(response).to match_response_schema('comments') }
       end
@@ -25,9 +25,9 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'when Failure' do
       context 'with invalid task_id' do
         let(:params) { { task_id: 0 } }
-  
+
         before { get :index, params: params }
-  
+
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
       end
@@ -40,7 +40,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'when Success' do
       context 'with valid body' do
         let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph } }
-  
+
         it { expect(response).to have_http_status(:created) }
         it { expect(response).to match_response_schema('comment') }
       end
@@ -48,7 +48,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       context 'with valid image' do
         let(:image) { fixture_file_upload('image.png') }
         let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph, image: image } }
-  
+
         it { expect(response).to have_http_status(:created) }
         it { expect(response).to match_response_schema('comment') }
         it { expect(task.comments.last.image.attached?).to be true }
@@ -104,7 +104,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'when Success' do
       context 'with valid id' do
         let(:params) { { id: comment.id } }
-  
+
         it { expect { delete :destroy, params: params }.to change(Comment, :count).by(-1) }
       end
     end
@@ -112,9 +112,9 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'when Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
-  
+
         before { delete :destroy, params: params }
-  
+
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.comment_not_found')) }
       end

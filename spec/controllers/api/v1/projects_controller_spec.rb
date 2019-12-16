@@ -54,15 +54,15 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'when Failure' do
       context 'with invalid name' do
         let(:params) { { name: nil } }
-  
+
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(response).to match_response_schema('errors') }
       end
-  
+
       context 'with existing name' do
         let(:project) { create(:project, user: user) }
         let(:params) { { name: project.name } }
-  
+
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_exist')) }
       end
@@ -77,7 +77,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'when Success' do
       context 'with valid name' do
         let(:params) { { id: project.id, name: FFaker::Lorem.word } }
-  
+
         it { expect(response).to have_http_status(:ok) }
         it { expect(response).to match_response_schema('project') }
       end
@@ -86,21 +86,21 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'when Failure' do
       context 'with invalid name' do
         let(:params) { { id: project.id, name: nil } }
-  
+
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(response).to match_response_schema('errors') }
       end
-  
+
       context 'with existing name' do
         let(:params) { { id: project.id, name: project.name } }
-  
+
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_exist')) }
       end
-  
+
       context 'with invalid id' do
         let(:params) { { id: 0, name: FFaker::Lorem.word } }
-  
+
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
       end
@@ -113,7 +113,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'when Success' do
       context 'with valid id' do
         let(:params) { { id: project.id } }
-  
+
         it { expect { delete :destroy, params: params }.to change(Project, :count).by(-1) }
       end
     end
@@ -121,9 +121,9 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context 'when Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
-  
+
         before { delete :destroy, params: params }
-  
+
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
       end

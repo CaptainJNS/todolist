@@ -94,21 +94,21 @@ RSpec.describe Api::V1::TasksController, type: :controller do
     context 'when Success' do
       context 'with valid name and deadline' do
         let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
-  
+
         it { expect(response).to have_http_status(:ok) }
       end
 
       context 'with valid position' do
         let(:params) { { id: task.id, position: 1 } }
-  
+
         before { create(:task, project: project, position: 1) }
-  
+
         it { expect(response).to have_http_status(:ok) }
       end
 
       context 'with valid done parameter' do
         let(:params) { { id: task.id, done: true } }
-  
+
         it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
       end
     end
@@ -184,7 +184,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
     context 'when Success' do
       context 'with valid id' do
         let(:params) { { id: task.id } }
-  
+
         it { expect { delete :destroy, params: params }.to change(Task, :count).by(-1) }
       end
     end
@@ -192,9 +192,9 @@ RSpec.describe Api::V1::TasksController, type: :controller do
     context 'when Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
-  
+
         before { delete :destroy, params: params }
-  
+
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.task_not_found')) }
       end
