@@ -14,3 +14,6 @@ Metrics/BlockLength:
 
 RSpec/MessageSpies:
   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
