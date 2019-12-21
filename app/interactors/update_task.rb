@@ -13,8 +13,8 @@ class UpdateTask
   def call
     return unless context.success?
 
-    change_position(context.params[:position].to_i) if context.params[:position].present?
-    return object_invalid!(:task) unless context.task.update(context.params.except(:position))
+    change_position(position.to_i) if position.present?
+    return object_invalid!(:task) unless context.task.update(general_task_data)
 
     context.data = {}
   end
@@ -26,9 +26,7 @@ class UpdateTask
   end
 
   def all_tasks_complete(tasks)
-    tasks.each { |t| return false unless t.done }
-
-    true
+    tasks.pluck(:done).all?(true)
   end
 
   def check_tasks_complete
@@ -40,5 +38,13 @@ class UpdateTask
 
     context.task.errors.add(:base, I18n.t('errors.invalid_position'))
     object_invalid!(:task)
+  end
+
+  def position
+    context.params[:position]
+  end
+
+  def general_task_data
+    context.params.except(:position)
   end
 end

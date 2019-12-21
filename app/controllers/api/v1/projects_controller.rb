@@ -35,7 +35,7 @@ class Api::V1::ProjectsController < ApplicationController
   param_group :project
   def update
     result = UpdateProject.call(project: project, name: params[:name])
-    return render json: result.project, status: :ok if result.success?
+    return render json: {}, status: :ok if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end

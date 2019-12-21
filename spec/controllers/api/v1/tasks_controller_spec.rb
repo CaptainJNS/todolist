@@ -8,7 +8,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   before { @request.headers[I18n.t('auth')] = JsonWebToken.encode(user_id: user.id) }
 
   describe 'GET index' do
-    context 'when Success' do
+    context 'Success' do
       context 'with valid project_id' do
         let(:params) { { project_id: project.id } }
 
@@ -22,7 +22,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid project_id' do
         let(:params) { { project_id: 0 } }
 
@@ -37,7 +37,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   describe 'GET show' do
     before { get :show, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid id' do
         let(:task) { create(:task, project: project) }
         let(:params) { { id: task.id } }
@@ -47,7 +47,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
@@ -58,27 +58,29 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   end
 
   describe 'POST create' do
+    let(:params) { { project_id: project_id, name: name } }
+    let(:name) { FFaker::Book.title }
+    let(:project_id) { project.id }
+
     before { post :create, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid name' do
-        let(:params) { { project_id: project.id, name: FFaker::Book.title } }
-
         it { expect(response).to have_http_status(:created) }
         it { expect(response).to match_response_schema('task') }
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid name' do
-        let(:params) { { project_id: project.id, name: nil } }
+        let(:name) { nil }
 
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(response).to match_response_schema('errors') }
       end
 
       context 'with invalid project_id' do
-        let(:params) { { project_id: 0, name: FFaker::Book.title } }
+        let(:project_id) { 0 }
 
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
@@ -91,7 +93,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
 
     before { put :update, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid name and deadline' do
         let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
 
@@ -113,7 +115,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid name' do
         let(:params) { { id: task.id, name: nil } }
 
@@ -181,7 +183,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   describe 'DELETE destroy' do
     let!(:task) { create(:task, project: project) }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid id' do
         let(:params) { { id: task.id } }
 
@@ -189,7 +191,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 

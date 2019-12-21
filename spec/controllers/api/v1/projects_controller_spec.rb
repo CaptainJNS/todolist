@@ -19,7 +19,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'GET show' do
     before { get :show, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid id' do
         let(:project) { create(:project, user: user) }
         let(:params) { { id: project.id } }
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'POST create' do
     before { post :create, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid name' do
         let(:params) { { name: FFaker::Book.title } }
 
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid name' do
         let(:params) { { name: nil } }
 
@@ -71,35 +71,35 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
 
   describe 'PUT update' do
     let(:project) { create(:project, user: user) }
+    let(:params) { { id: project_id, name: name } }
+    let(:project_id) { project.id }
+    let(:name) { FFaker::Lorem.word }
 
     before { put :update, params: params }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid name' do
-        let(:params) { { id: project.id, name: FFaker::Lorem.word } }
-
         it { expect(response).to have_http_status(:ok) }
-        it { expect(response).to match_response_schema('project') }
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid name' do
-        let(:params) { { id: project.id, name: nil } }
+        let(:name) { nil }
 
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(response).to match_response_schema('errors') }
       end
 
       context 'with existing name' do
-        let(:params) { { id: project.id, name: project.name } }
+        let(:name) { project.name }
 
         it { expect(response).to have_http_status(:unprocessable_entity) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_exist')) }
       end
 
       context 'with invalid id' do
-        let(:params) { { id: 0, name: FFaker::Lorem.word } }
+        let(:project_id) { 0 }
 
         it { expect(response).to have_http_status(:not_found) }
         it { expect(JSON.parse(response.body)['errors']).to include(I18n.t('errors.project_not_found')) }
@@ -110,7 +110,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'DELETE destroy' do
     let!(:project) { create(:project, user: user) }
 
-    context 'when Success' do
+    context 'Success' do
       context 'with valid id' do
         let(:params) { { id: project.id } }
 
@@ -118,7 +118,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'when Failure' do
+    context 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
