@@ -1,3 +1,17 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  apipie
+
+  namespace :api do
+    namespace :v1 do
+      resource :session, only: %i[create destroy]
+
+      resources :users, only: :create
+
+      resources :projects do
+        resources :tasks, shallow: true do
+          resources :comments, only: %i[index create destroy]
+        end
+      end
+    end
+  end
 end

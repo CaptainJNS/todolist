@@ -1,33 +1,18 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  auth: 'Authorization'
+
+  errors:
+    invalid_login: 'Invalid login credentials'
+    project_not_found: 'Project not found'
+    project_exist: 'The project with such name does already exist.'
+    task_not_found: 'Task not found'
+    invalid_deadline: 'Deadline is not a date'
+    past_deadline: 'Deadline can not be past'
+    invalid_position: 'Invalid task position'
+    comment_not_found: 'Comment not found'
+    invalid_image_type: 'Wrong file format. You can upload a *.jpg or *.png formats files only'
+    invalid_image_size: 'An uploaded file is too large. The size shouldn’t exceed 10 MB.'
+    invalid_done: 'Done must be a boolean'
+
+  messages:
+    all_tasks_complete: 'Well Done! You are successfully completed all the tasks.'
