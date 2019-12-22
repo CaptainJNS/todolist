@@ -19,7 +19,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'GET show' do
     before { get :show, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid id' do
         let(:project) { create(:project, user: user) }
         let(:params) { { id: project.id } }
@@ -29,7 +29,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'POST create' do
     before { post :create, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid name' do
         let(:params) { { name: FFaker::Book.title } }
 
@@ -51,7 +51,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid name' do
         let(:params) { { name: nil } }
 
@@ -77,13 +77,13 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
 
     before { put :update, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid name' do
         it { expect(response).to have_http_status(:ok) }
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid name' do
         let(:name) { nil }
 
@@ -110,7 +110,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe 'DELETE destroy' do
     let!(:project) { create(:project, user: user) }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid id' do
         let(:params) { { id: project.id } }
 
@@ -118,7 +118,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 

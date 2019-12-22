@@ -7,7 +7,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
   describe 'POST create' do
     before { post :create, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid login data' do
         let(:params) { { username: 'Jason', password: 'password' } }
 
@@ -16,7 +16,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid login data' do
         let(:params) { { username: 'incorrect', password: 'incorrect' } }
 
@@ -34,7 +34,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       delete :destroy
     end
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid token' do
         let(:token) { JsonWebToken.encode(user_id: user.id) }
 
@@ -42,7 +42,7 @@ RSpec.describe Api::V1::SessionsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid token' do
         let(:token) { 'some.invalid.token' }
 

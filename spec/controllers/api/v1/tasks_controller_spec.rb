@@ -8,7 +8,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   before { @request.headers[I18n.t('auth')] = JsonWebToken.encode(user_id: user.id) }
 
   describe 'GET index' do
-    context 'Success' do
+    describe 'Success' do
       context 'with valid project_id' do
         let(:params) { { project_id: project.id } }
 
@@ -22,7 +22,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid project_id' do
         let(:params) { { project_id: 0 } }
 
@@ -37,7 +37,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   describe 'GET show' do
     before { get :show, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid id' do
         let(:task) { create(:task, project: project) }
         let(:params) { { id: task.id } }
@@ -47,7 +47,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
@@ -64,14 +64,14 @@ RSpec.describe Api::V1::TasksController, type: :controller do
 
     before { post :create, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid name' do
         it { expect(response).to have_http_status(:created) }
         it { expect(response).to match_response_schema('task') }
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid name' do
         let(:name) { nil }
 
@@ -93,7 +93,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
 
     before { put :update, params: params }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid name and deadline' do
         let(:params) { { id: task.id, name: FFaker::Lorem.word, deadline: DateTime.now + 1.day } }
 
@@ -111,11 +111,11 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       context 'with valid done parameter' do
         let(:params) { { id: task.id, done: true } }
 
-        it { expect(JSON.parse(response.body)['messages']).to include(I18n.t('messages.all_tasks_complete')) }
+        it { expect(response).to have_http_status(:ok) }
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid name' do
         let(:params) { { id: task.id, name: nil } }
 
@@ -183,7 +183,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
   describe 'DELETE destroy' do
     let!(:task) { create(:task, project: project) }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid id' do
         let(:params) { { id: task.id } }
 
@@ -191,7 +191,7 @@ RSpec.describe Api::V1::TasksController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 

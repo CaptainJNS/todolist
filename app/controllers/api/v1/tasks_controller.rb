@@ -42,7 +42,7 @@ class Api::V1::TasksController < ApplicationController
   param_group :task
   def update
     result = UpdateTask.call(task: task, params: task_params)
-    return render json: result.data, status: :ok if result.success?
+    return render json: {}, status: :ok if result.success?
 
     render json: { errors: result.errors }, status: result.status
   end

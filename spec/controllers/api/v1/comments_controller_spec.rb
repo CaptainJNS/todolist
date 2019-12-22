@@ -8,7 +8,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   before { @request.headers[I18n.t('auth')] = JsonWebToken.encode(user_id: user.id) }
 
   describe 'GET index' do
-    context 'Success' do
+    describe 'Success' do
       context 'with valid task_id' do
         let(:params) { { task_id: task.id } }
 
@@ -22,7 +22,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid task_id' do
         let(:params) { { task_id: 0 } }
 
@@ -37,7 +37,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   describe 'POST create' do
     before { |example| post :create, params: params unless example.metadata[:skip_before] }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid body' do
         let(:params) { { task_id: task.id, body: FFaker::Lorem.paragraph } }
 
@@ -55,7 +55,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid body' do
         let(:params) { { task_id: task.id, body: nil } }
 
@@ -101,7 +101,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   describe 'DELETE destroy' do
     let!(:comment) { create(:comment, task: task) }
 
-    context 'Success' do
+    describe 'Success' do
       context 'with valid id' do
         let(:params) { { id: comment.id } }
 
@@ -109,7 +109,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       end
     end
 
-    context 'Failure' do
+    describe 'Failure' do
       context 'with invalid id' do
         let(:params) { { id: 0 } }
 
