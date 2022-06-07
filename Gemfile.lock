@@ -932,7 +932,7 @@ GEM
     interactor (3.1.1)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
-    jmespath (1.4.0)
+    jmespath (1.6.1)
     json (2.2.0)
     json-schema (2.8.1)
       addressable (>= 2.4)
